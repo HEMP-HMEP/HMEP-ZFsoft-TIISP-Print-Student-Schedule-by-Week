@@ -167,10 +167,6 @@
 
         iframeDoc.write(`
             <style>
-                /* 设置横向打印 */
-                @page {
-                size: landscape;
-                }
                 /* 修复原页面样式导致打印高度限制的问题 */
                 html, body {
                     height: auto !important;
