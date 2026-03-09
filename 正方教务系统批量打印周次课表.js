@@ -2,9 +2,10 @@
 // @name         正方教务系统批量打印周次课表
 // @version      1.0
 // @description  在"学生课表查询（按周次）"(/kbcx/xskbcxZccx_cxXskbcxIndex.html)页面增加批量打印所有周次的功能
-// @author       短臂猿-Short_Arm_Ape
-// @homepage     https://github.com/Short-Arm-Ape/ZFsoft-TIISP-Print-Student-Schedule-by-Week
-// @match        *://*/jwglxt/kbcx/xskbcxZccx_cxXskbcxIndex.html*
+// @author       短臂猿-Short_Arm_Ape/raccoon
+// @homepage     https://github.com/HEMP-HMEP/HMEP-ZFsoft-TIISP-Print-Student-Schedule-by-Week/
+// @match        http://172.16.101.107/jwglxt/kbcx/xskbcxZccx_cxXskbcxIndex.html*
+// @match        *://webvpn.hnjdzy.edu.cn/http/77726476706e69737468656265737421a1a013d2766626012e59c7fdc802/jwglxt/kbcx/xskbcxZccx_cxXskbcxIndex.html*
 // @icon         https://cloud.zfsoft.com:6143/jwglxt/logo/favicon.ico
 // @grant        none
 // ==/UserScript==
