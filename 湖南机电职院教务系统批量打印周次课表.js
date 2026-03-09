@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         正方教务系统批量打印周次课表
+// @name         湖南机电职院教务系统批量打印周次课表
 // @version      1.0
 // @description  在"学生课表查询（按周次）"(/kbcx/xskbcxZccx_cxXskbcxIndex.html)页面增加批量打印所有周次的功能
 // @author       短臂猿-Short_Arm_Ape/raccoon
