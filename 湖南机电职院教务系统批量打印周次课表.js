@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         湖南机电职院教务系统批量打印周次课表
-// @version      1.0
+// @version      1.1
 // @description  在"学生课表查询（按周次）"(/kbcx/xskbcxZccx_cxXskbcxIndex.html)页面增加批量打印所有周次的功能
 // @author       短臂猿-Short_Arm_Ape/raccoon
 // @homepage     https://github.com/HEMP-HMEP/HMEP-ZFsoft-TIISP-Print-Student-Schedule-by-Week/
@@ -15,9 +15,7 @@
 
     initBatchPrintOnTimetablePage();
 
-    /**
-     * 课表页面初始化：添加批量打印按钮，绑定事件
-     */
+    // 课表页面初始化：添加批量打印按钮，绑定事件
     function initBatchPrintOnTimetablePage() {
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', setupBatchPrintUI);
@@ -37,14 +35,26 @@
         }
 
         const batchBtn = document.createElement('button');
+        batchBtn.type = 'button';  // 禁止提交表单行为，避免被导向至系统维护页
         batchBtn.id = 'batchPrintBtn';
         batchBtn.className = 'btn btn-primary btn-sm';
         batchBtn.style.marginLeft = '10px';
         batchBtn.style.verticalAlign = 'middle';
         batchBtn.innerHTML = '<span class="glyphicon glyphicon-print"></span> 批量打印所有周次';
-        batchBtn.onclick = batchPrintAllWeeks;
+        batchBtn.onclick = confirmRun;
 
         zsLi.appendChild(batchBtn);
+    }
+
+    // 确认开始
+    function confirmRun() {
+        let totalWeeks = $('#zs option').length;
+        let estimatedDuration = totalWeeks * 3
+        if (confirm(`将开始批量打印 ${totalWeeks} 个周次的课表，预计最长耗时 ${estimatedDuration} 秒，请确保网络通畅。\n点击确定后，脚本会自动遍历周次并收集数据，最后打开打印预览。\n在此过程中，请勿进行任何操作，包括调整页面缩放和窗口大小等。`)) {
+            batchPrintAllWeeks();
+        } else {
+            return;
+        }
     }
 
     async function batchPrintAllWeeks() {
@@ -99,7 +109,7 @@
             const $tableClone = $('#myTab').clone(true);
 
             const $weekDiv = $('<div class="print-week-block"></div>');
-            $weekDiv.append(`<h3 style="text-align:center; margin:20px 0;">第${week.text}</h3>`);
+            $weekDiv.append(`<h3 style="text-align:center; margin:20px 0;">第${week.text}周</h3>`);
             $weekDiv.append($tableClone);
 
             if (i > 0) {
@@ -136,7 +146,7 @@
                     clearInterval(interval);
                     reject('更新超时');
                 }
-            }, 200);
+            }, 200);// 即超过200*15=3000ms后判定超时
         });
     }
 
@@ -147,12 +157,20 @@
         const iframeDoc = iframe.contentWindow.document;
 
         iframeDoc.open();
-        iframeDoc.write('<!DOCTYPE html><html><head><title>课表批量打印</title>');
+        // 获取学年和学期显示文本
+        const xnmText = $('#xnm option:selected').text() || '未知';
+        const xqmText = $('#xqm option:selected').text() || '未知';
+        const pageTitle = xnmText + '学年' + '第' + xqmText + '学期课表';
+        iframeDoc.write('<!DOCTYPE html><html><head><title>' + pageTitle + '</title>');
 
         copyStylesToIframe(iframeDoc);
 
         iframeDoc.write(`
             <style>
+                /* 设置横向打印 */
+                @page {
+                size: landscape;
+                }
                 /* 修复原页面样式导致打印高度限制的问题 */
                 html, body {
                     height: auto !important;
